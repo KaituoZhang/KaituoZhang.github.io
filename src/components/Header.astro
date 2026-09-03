@@ -1,0 +1,14 @@
+---
+import { navItems } from '../data/site';
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <a class="identity" href="/" aria-label="Kaituo Zhang, home">
+    <span class="identity-mark" aria-hidden="true">KZ</span><span>Kaituo Zhang</span>
+  </a>
+  <nav aria-label="Main navigation">
+    {navItems.map((item) => <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>{item.label}</a>)}
+  </nav>
+  <span class="language" aria-label="Language selection coming soon">EN <span>/</span> 中文</span>
+</header>

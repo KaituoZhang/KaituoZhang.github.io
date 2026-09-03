@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NotionBlocks from '../../components/NotionBlocks.astro';
+import { formatDate, posts, type Post } from '../../lib/notion';
+
+export function getStaticPaths() {
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+interface Props { post: Post; }
+const { post } = Astro.props;
+---
+<BaseLayout title={post.title} description={post.summary || `An article by Kaituo Zhang: ${post.title}`}>
+  <article class="article">
+    <header class="article-header">
+      <a class="back-link" href="/blog/">← All writing</a>
+      <p class="eyebrow">{post.language === 'zh' ? '文章' : 'Field notes'}</p>
+      <h1>{post.title}</h1>
+      {post.summary && <p class="lead">{post.summary}</p>}
+      <div class="article-meta"><time datetime={post.publishedDate}>{formatDate(post.publishedDate)}</time><span>·</span><span>{post.language.toUpperCase()}</span></div>
+      {post.cover && <img class="article-cover" src={post.cover} alt="" />}
+    </header>
+    <div class="article-body"><NotionBlocks blocks={post.blocks} /></div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,9 @@
+---
+import type { RichText } from '../lib/notion';
+interface Props { items?: RichText[]; }
+const { items = [] } = Astro.props;
+---
+{items.map((item) => {
+  const classes = Object.entries(item.annotations ?? {}).filter(([, enabled]) => enabled === true).map(([name]) => `rt-${name}`).join(' ');
+  return item.href ? <a href={item.href} class={classes}>{item.text}</a> : <span class={classes}>{item.text}</span>;
+})}

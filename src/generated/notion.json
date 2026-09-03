@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-09-03T00:00:00.000Z",
+  "posts": [
+    {
+      "id": "preview-llms",
+      "title": "Harnessing the Power of LLMs in Practice: A Survey on ChatGPT and Beyond",
+      "slug": "harnessing-the-power-of-llms-in-practice",
+      "summary": "A practical guide to evaluating and applying large language models across real-world NLP tasks.",
+      "language": "en",
+      "translationKey": "harnessing-the-power-of-llms-in-practice",
+      "publishedDate": "2024-06-06",
+      "updatedDate": "2024-06-27",
+      "tags": ["LLM", "Research"],
+      "featured": true,
+      "cover": null,
+      "blocks": [
+        { "id": "p1", "type": "heading_2", "richText": [{ "text": "My Summary", "href": null, "annotations": {} }] },
+        { "id": "p2", "type": "paragraph", "richText": [{ "text": "This work focuses on the practical aspects of working with LLMs in the real world and downstream NLP tasks.", "href": null, "annotations": {} }] }
+      ]
+    },
+    {
+      "id": "preview-gpt",
+      "title": "State of GPT",
+      "slug": "state-of-gpt",
+      "summary": "Notes on the modern GPT training pipeline, from pretraining through alignment and reinforcement learning.",
+      "language": "en",
+      "translationKey": "state-of-gpt",
+      "publishedDate": "2024-11-09",
+      "updatedDate": "2024-11-09",
+      "tags": ["GPT", "Notes"],
+      "featured": false,
+      "cover": null,
+      "blocks": [
+        { "id": "g1", "type": "heading_2", "richText": [{ "text": "How to Train GPT", "href": null, "annotations": {} }] },
+        { "id": "g2", "type": "paragraph", "richText": [{ "text": "Four stages: pretraining, supervised fine-tuning, reward modeling, and reinforcement learning.", "href": null, "annotations": {} }] }
+      ]
+    }
+  ]
+}
