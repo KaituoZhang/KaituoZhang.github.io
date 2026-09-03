@@ -1,27 +1,8 @@
 ---
 import type { NotionBlock } from '../lib/notion';
-import RichText from './RichText.astro';
+import { renderBlocks } from '../lib/notion-render';
 interface Props { blocks?: NotionBlock[]; }
 const { blocks = [] } = Astro.props;
+const html = renderBlocks(blocks);
 ---
-{blocks.map((block) => (
-  <>
-    {block.type === 'paragraph' && <p><RichText items={block.richText} /></p>}
-    {block.type === 'heading_1' && <h2><RichText items={block.richText} /></h2>}
-    {block.type === 'heading_2' && <h3><RichText items={block.richText} /></h3>}
-    {block.type === 'heading_3' && <h4><RichText items={block.richText} /></h4>}
-    {block.type === 'bulleted_list_item' && <ul><li><RichText items={block.richText} /><NotionBlocks blocks={block.children} /></li></ul>}
-    {block.type === 'numbered_list_item' && <ol><li><RichText items={block.richText} /><NotionBlocks blocks={block.children} /></li></ol>}
-    {block.type === 'quote' && <blockquote><RichText items={block.richText} /></blockquote>}
-    {block.type === 'callout' && <aside class="notion-callout"><span aria-hidden="true">{block.icon}</span><div><RichText items={block.richText} /><NotionBlocks blocks={block.children} /></div></aside>}
-    {block.type === 'toggle' && <details><summary><RichText items={block.richText} /></summary><NotionBlocks blocks={block.children} /></details>}
-    {block.type === 'code' && <figure class="code-block"><pre><code class={`language-${block.language}`}>{block.richText?.map((item) => item.text).join('')}</code></pre>{block.caption && <figcaption>{block.caption}</figcaption>}</figure>}
-    {block.type === 'image' && block.src && <figure><img src={block.src} alt={block.caption || ''} loading="lazy" />{block.caption && <figcaption>{block.caption}</figcaption>}</figure>}
-    {block.type === 'divider' && <hr />}
-    {block.type === 'bookmark' && <p class="bookmark"><a href={block.url}>{block.caption || block.url} ↗</a></p>}
-    {block.type === 'equation' && <pre class="equation">{block.expression}</pre>}
-    {block.type === 'table' && <div class="table-scroll"><table><tbody><NotionBlocks blocks={block.children} /></tbody></table></div>}
-    {block.type === 'table_row' && <tr>{block.cells?.map((cell) => <td><RichText items={cell} /></td>)}</tr>}
-    {!['bulleted_list_item', 'numbered_list_item', 'callout', 'toggle', 'table'].includes(block.type) && block.children && <NotionBlocks blocks={block.children} />}
-  </>
-))}
+<Fragment set:html={html} />
