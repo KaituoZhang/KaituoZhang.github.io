@@ -6,7 +6,8 @@ import '../styles/global.css';
 
 interface Props { title?: string; description: string; lang?: Lang; alternateHref?: string; }
 const { title, description, lang = 'en', alternateHref } = Astro.props;
-const pageTitle = title ? `${title} — Kaituo Zhang` : 'Kaituo Zhang — AI Researcher & Engineer';
+const siteName = lang === 'zh' ? '章凯拓' : 'Kaituo Zhang';
+const pageTitle = title ? `${title} — ${siteName}` : (lang === 'zh' ? '章凯拓 — AI 研究者与工程师' : 'Kaituo Zhang — AI Researcher & Engineer');
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const otherLang = lang === 'en' ? 'zh' : 'en';
 const otherHref = alternateHref ?? Astro.url.pathname.replace(/^\/(en|zh)(?=\/|$)/, `/${otherLang}`);
