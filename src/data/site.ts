@@ -8,7 +8,7 @@ export const copy = {
     hero: {
       kicker: 'Kaituo (Philip) Zhang · 章凯拓',
       title: 'Building AI that deserves to be trusted.',
-      intro: 'Hello, my name is Kaituo (Philip) Zhang. I’m a PhD candidate in the Department of Industrial Engineering at the University of Houston, advised by Dr. Na Zou. My current research interests include fairness and faithfulness in large language models (LLMs) and context management.',
+      intro: 'Hello, my name is Kaituo (Philip) Zhang. I’m a PhD candidate in the Department of Industrial Engineering at the University of Houston, co-advised by Dr. Na Zou and Dr. Ying Lin. My current research interests include fairness and faithfulness in large language models (LLMs) and context management.',
       role: 'PhD Candidate · Research Assistant',
       place: 'Houston, United States',
     },
@@ -18,7 +18,7 @@ export const copy = {
     about: {
       kicker: 'About', title: 'Research with rigor, built for the real world.',
       body: [
-        'I am a PhD candidate in Industrial Engineering at the University of Houston, advised by Dr. Na Zou. My research sits at the intersection of machine learning, reliability, and practical system building.',
+        'I am a PhD candidate in Industrial Engineering at the University of Houston, co-advised by Dr. Na Zou and Dr. Ying Lin. My research sits at the intersection of machine learning, reliability, and practical system building.',
         'I focus on fairness and faithfulness in large language models, context management, synthetic data evaluation, and unsupervised anomaly detection. I enjoy turning research questions into methods, experiments, and open tools that other people can use.',
       ],
       recognition: 'Recognition', awards: ['IDE Agrawal Scholarship Endowment, 2026', 'Agrawal Association of America Scholarship, 2025', 'Excellent Undergraduate Student in Zhejiang Province, 2024'],
@@ -41,7 +41,7 @@ export const copy = {
     hero: {
       kicker: '章凯拓（Philip）',
       title: '让人工智能更可靠，也更值得信任。',
-      intro: '你好，我是章凯拓（Kaituo Philip Zhang）。目前就读于休斯顿大学工业工程系博士项目，师从邹娜教授。我的研究主要关注大语言模型的公平性与忠实性、上下文管理，以及可靠的机器学习方法。',
+      intro: '你好，我是章凯拓（Kaituo Philip Zhang）。目前就读于休斯顿大学工业工程系博士项目，由 Na Zou 教授和 Ying Lin 教授共同指导。我的研究主要关注大语言模型的公平性与忠实性、上下文管理，以及可靠的机器学习方法。',
       role: '博士候选人 · 研究助理',
       place: '美国 · 休斯顿',
     },
@@ -51,7 +51,7 @@ export const copy = {
     about: {
       kicker: '关于我', title: '严谨地研究，也把成果带进真实世界。',
       body: [
-        '我是休斯顿大学工业工程系博士候选人，师从邹娜教授。我的研究位于机器学习、可靠性与实际系统构建的交叉领域。',
+        '我是休斯顿大学工业工程系博士候选人，由 Na Zou 教授和 Ying Lin 教授共同指导。我的研究位于机器学习、可靠性与实际系统构建的交叉领域。',
         '目前，我主要研究大语言模型的公平性与忠实性、上下文管理、合成数据评估和无监督异常检测。我喜欢把研究问题转化为可验证的方法、实验，以及他人可以使用的开放工具。',
       ],
       recognition: '荣誉与奖项', awards: ['IDE Agrawal Scholarship Endowment，2026', 'Agrawal Association of America Scholarship，2025', '浙江省优秀本科毕业生，2024'],
