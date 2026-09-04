@@ -218,25 +218,53 @@ async function requestTranslation(units, sourceLanguage, targetLanguage) {
   return JSON.parse(responseText(await response.json())).translations;
 }
 
+function validTranslations(units, translations) {
+  if (!Array.isArray(translations)) return false;
+  const expected = new Set(units.map((unit) => unit.id));
+  const returnedIds = new Set(translations.map((item) => item.id));
+  return translations.length === expected.size && returnedIds.size === expected.size && translations.every((item) => expected.has(item.id) && typeof item.text === 'string');
+}
+
+function translationBatches(units) {
+  const batches = [];
+  let batch = [];
+  let characters = 0;
+  for (const unit of units) {
+    if (batch.length && (batch.length >= 30 || characters + unit.text.length > 8000)) {
+      batches.push(batch);
+      batch = [];
+      characters = 0;
+    }
+    batch.push(unit);
+    characters += unit.text.length;
+  }
+  if (batch.length) batches.push(batch);
+  return batches;
+}
+
 async function translatedPost(post, targetLanguage) {
   const sourceLanguage = normalizedLanguage(post.language);
   const units = translationUnits(post);
-  const cacheHash = createHash('sha256').update(JSON.stringify({ model: translationModel, sourceLanguage, targetLanguage, units })).digest('hex');
+  const cacheHash = createHash('sha256').update(JSON.stringify({ cacheVersion: 2, model: translationModel, sourceLanguage, targetLanguage, units })).digest('hex');
   const cacheFile = join(translationCacheDirectory, `${cacheHash}.json`);
   let translations;
   try {
     translations = JSON.parse(await readFile(cacheFile, 'utf8'));
+    if (!validTranslations(units, translations)) throw new Error('Invalid translation cache.');
     console.log(`Using cached ${sourceLanguage}→${targetLanguage} translation for ${post.slug}.`);
   } catch {
     if (!translationApiKey) return null;
-    translations = await requestTranslation(units, sourceLanguage, targetLanguage);
+    translations = [];
+    for (const batch of translationBatches(units)) {
+      const translatedBatch = await requestTranslation(batch, sourceLanguage, targetLanguage);
+      if (!validTranslations(batch, translatedBatch)) throw new Error(`Translation shape mismatch for ${post.slug}.`);
+      translations.push(...translatedBatch);
+    }
     await writeFile(cacheFile, `${JSON.stringify(translations, null, 2)}\n`);
     console.log(`Translated ${post.slug} from ${sourceLanguage} to ${targetLanguage} with ${translationModel}.`);
   }
 
-  const expected = new Set(units.map((unit) => unit.id));
-  const returnedIds = new Set(translations.map((item) => item.id));
-  if (translations.length !== expected.size || returnedIds.size !== expected.size || translations.some((item) => !expected.has(item.id))) throw new Error(`Translation shape mismatch for ${post.slug}.`);
+  if (!validTranslations(units, translations)) throw new Error(`Translation shape mismatch for ${post.slug}.`);
   const result = structuredClone(post);
   for (const item of translations) setPath(result, item.id, item.text);
   result.id = `${post.id}-${targetLanguage}-auto`;
