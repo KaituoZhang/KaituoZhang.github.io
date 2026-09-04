@@ -1,12 +1,15 @@
 import { createHash } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
 const token = process.env.NOTION_TOKEN;
 const dataSourceId = process.env.NOTION_DATA_SOURCE_ID;
+const translationApiKey = process.env.OPENAI_API_KEY;
+const translationModel = process.env.OPENAI_TRANSLATION_MODEL || 'gpt-5-mini';
 const root = new URL('..', import.meta.url).pathname;
 const outputFile = join(root, 'src/generated/notion.json');
 const assetDirectory = join(root, 'public/notion-assets');
+const translationCacheDirectory = join(root, '.translation-cache');
 const notionVersion = '2026-03-11';
 
 if (!token || !dataSourceId) {
@@ -15,6 +18,7 @@ if (!token || !dataSourceId) {
 }
 
 await mkdir(assetDirectory, { recursive: true });
+await mkdir(translationCacheDirectory, { recursive: true });
 
 async function notion(path, options = {}) {
   for (let attempt = 0; attempt < 4; attempt += 1) {
@@ -142,6 +146,124 @@ async function simplifyBlock(block) {
   return item;
 }
 
+const normalizedLanguage = (value) => String(value || 'en').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+const hasWords = (value) => /[\p{L}\p{Script=Han}]/u.test(value || '');
+
+function translationUnits(post) {
+  const units = [];
+  const add = (id, text) => { if (hasWords(text)) units.push({ id, text }); };
+  add('title', post.title);
+  add('summary', post.summary);
+
+  const visit = (blocks, prefix = 'blocks') => {
+    for (const [blockIndex, block] of blocks.entries()) {
+      const blockPath = `${prefix}.${blockIndex}`;
+      if (block.type !== 'code') {
+        for (const [textIndex, item] of (block.richText ?? []).entries()) add(`${blockPath}.richText.${textIndex}.text`, item.text);
+        if (block.caption) add(`${blockPath}.caption`, block.caption);
+        for (const [rowIndex, row] of (block.cells ?? []).entries()) {
+          for (const [cellIndex, cell] of row.entries()) {
+            for (const [textIndex, item] of cell.entries()) add(`${blockPath}.cells.${rowIndex}.${cellIndex}.${textIndex}.text`, item.text);
+          }
+        }
+      }
+      if (block.children?.length) visit(block.children, `${blockPath}.children`);
+    }
+  };
+  visit(post.blocks);
+  return units;
+}
+
+function setPath(target, path, value) {
+  const parts = path.split('.');
+  const final = parts.pop();
+  let cursor = target;
+  for (const part of parts) cursor = cursor[part];
+  cursor[final] = value;
+}
+
+function responseText(payload) {
+  if (typeof payload.output_text === 'string') return payload.output_text;
+  for (const item of payload.output ?? []) {
+    for (const content of item.content ?? []) if (content.type === 'output_text' && content.text) return content.text;
+  }
+  throw new Error('Translation response did not contain output text.');
+}
+
+async function requestTranslation(units, sourceLanguage, targetLanguage) {
+  const schema = {
+    type: 'object', additionalProperties: false, required: ['translations'],
+    properties: {
+      translations: {
+        type: 'array',
+        items: {
+          type: 'object', additionalProperties: false, required: ['id', 'text'],
+          properties: { id: { type: 'string' }, text: { type: 'string' } },
+        },
+      },
+    },
+  };
+  const response = await fetch('https://api.openai.com/v1/responses', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${translationApiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: translationModel,
+      store: false,
+      instructions: `You are a careful bilingual technical editor. Translate every item from ${sourceLanguage === 'zh' ? 'Simplified Chinese' : 'English'} to ${targetLanguage === 'zh' ? 'natural Simplified Chinese' : 'natural academic English'}. Preserve technical terms, LeetCode problem numbers, Markdown, inline code, URLs, names, and meaning. Do not add commentary. Return every id exactly once.`,
+      input: JSON.stringify({ items: units }),
+      text: { format: { type: 'json_schema', name: 'blog_translation', strict: true, schema } },
+    }),
+  });
+  if (!response.ok) throw new Error(`OpenAI ${response.status}: ${await response.text()}`);
+  return JSON.parse(responseText(await response.json())).translations;
+}
+
+async function translatedPost(post, targetLanguage) {
+  const sourceLanguage = normalizedLanguage(post.language);
+  const units = translationUnits(post);
+  const cacheHash = createHash('sha256').update(JSON.stringify({ model: translationModel, sourceLanguage, targetLanguage, units })).digest('hex');
+  const cacheFile = join(translationCacheDirectory, `${cacheHash}.json`);
+  let translations;
+  try {
+    translations = JSON.parse(await readFile(cacheFile, 'utf8'));
+    console.log(`Using cached ${sourceLanguage}→${targetLanguage} translation for ${post.slug}.`);
+  } catch {
+    if (!translationApiKey) return null;
+    translations = await requestTranslation(units, sourceLanguage, targetLanguage);
+    await writeFile(cacheFile, `${JSON.stringify(translations, null, 2)}\n`);
+    console.log(`Translated ${post.slug} from ${sourceLanguage} to ${targetLanguage} with ${translationModel}.`);
+  }
+
+  const expected = new Set(units.map((unit) => unit.id));
+  const returnedIds = new Set(translations.map((item) => item.id));
+  if (translations.length !== expected.size || returnedIds.size !== expected.size || translations.some((item) => !expected.has(item.id))) throw new Error(`Translation shape mismatch for ${post.slug}.`);
+  const result = structuredClone(post);
+  for (const item of translations) setPath(result, item.id, item.text);
+  result.id = `${post.id}-${targetLanguage}-auto`;
+  result.language = targetLanguage;
+  result.autoTranslated = true;
+  result.sourceLanguage = sourceLanguage;
+  return result;
+}
+
+async function addMissingTranslations(posts) {
+  if (!translationApiKey) console.log('OPENAI_API_KEY is not set; publishing source-language posts only unless a cached translation exists.');
+  const originalPosts = [...posts];
+  for (const post of originalPosts) {
+    const sourceLanguage = normalizedLanguage(post.language);
+    const targetLanguage = sourceLanguage === 'zh' ? 'en' : 'zh';
+    const translationKey = post.translationKey || post.slug;
+    const hasManualTranslation = originalPosts.some((candidate) => (candidate.translationKey || candidate.slug) === translationKey && normalizedLanguage(candidate.language) === targetLanguage);
+    if (hasManualTranslation) continue;
+    try {
+      const translated = await translatedPost(post, targetLanguage);
+      if (translated) posts.push(translated);
+    } catch (error) {
+      console.warn(`Automatic translation skipped for ${post.slug}: ${error.message}`);
+    }
+  }
+}
+
 const pages = await paginate(`/data_sources/${dataSourceId}/query`, {
   page_size: 100,
   filter: { property: 'Status', status: { equals: 'Published' } },
@@ -174,6 +296,8 @@ for (const page of pages) {
   const post = posts.at(-1);
   for (const block of rawBlocks) post.blocks.push(await simplifyBlock(block));
 }
+
+await addMissingTranslations(posts);
 
 await writeFile(outputFile, `${JSON.stringify({ generatedAt: new Date().toISOString(), posts }, null, 2)}\n`);
 console.log(`Synced ${posts.length} published Notion post(s).`);

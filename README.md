@@ -9,6 +9,8 @@ Kaituo Zhang's personal website, built with Astro and statically deployed to Git
 3. Run the GitHub Actions workflow manually, or wait for its scheduled six-hour rebuild.
 4. The build downloads published page content and images, generates static routes, and deploys them to GitHub Pages.
 
+If a published post has no manual counterpart with the same `TranslationKey`, the build can automatically generate the missing Chinese or English version. Add `OPENAI_API_KEY` as a repository Actions secret to enable this. Machine translations are cached by source content, never written back to Notion, and labeled on the article page. A manual Notion translation always takes priority.
+
 The Notion token and data source ID live only in GitHub Actions Secrets. They are never included in browser JavaScript or Git history.
 
 ## Local development

@@ -22,11 +22,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+      - name: Restore translation cache
+        uses: actions/cache@v4
+        with:
+          path: .translation-cache
+          key: notion-translations-${{ github.run_id }}
+          restore-keys: |
+            notion-translations-
       - name: Build and upload
         uses: withastro/action@v5
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATA_SOURCE_ID: ${{ secrets.NOTION_DATA_SOURCE_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_TRANSLATION_MODEL: gpt-5-mini
 
   deploy:
     environment:

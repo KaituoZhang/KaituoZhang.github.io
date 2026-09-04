@@ -24,7 +24,7 @@ const c = copy[lang];
       <p class="eyebrow">{c.fieldNotes}</p>
       <h1>{post.title}</h1>
       {post.summary && <p class="lead">{post.summary}</p>}
-      <div class="article-meta"><time datetime={post.publishedDate}>{formatDate(post.publishedDate, lang === 'zh' ? 'zh-CN' : 'en-US')}</time><span>·</span><span>{lang.toUpperCase()}</span></div>
+      <div class="article-meta"><time datetime={post.publishedDate}>{formatDate(post.publishedDate, lang === 'zh' ? 'zh-CN' : 'en-US')}</time><span>·</span><span>{lang.toUpperCase()}</span>{post.autoTranslated && <><span>·</span><span class="translation-label">{lang === 'zh' ? '自动翻译' : 'Auto-translated'}</span></>}</div>
       {post.cover && <img class="article-cover" src={post.cover} alt="" />}
     </header>
     <div class="article-body"><NotionBlocks blocks={post.blocks} /></div>

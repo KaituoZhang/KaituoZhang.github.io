@@ -34,6 +34,8 @@ export interface Post {
   featured: boolean;
   cover: string | null;
   blocks: NotionBlock[];
+  autoTranslated?: boolean;
+  sourceLanguage?: string;
 }
 
 export const posts = (data.posts as Post[]).sort((a, b) => b.publishedDate.localeCompare(a.publishedDate));
