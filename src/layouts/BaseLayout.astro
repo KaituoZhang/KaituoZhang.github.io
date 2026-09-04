@@ -26,7 +26,8 @@ const otherHref = alternateHref ?? Astro.url.pathname.replace(/^\/(en|zh)(?=\/|$
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={lang} href={canonical} />
     <link rel="alternate" hreflang={otherLang} href={new URL(otherHref, Astro.site ?? Astro.url.origin)} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/kaituo-avatar-icon.png" />
+    <link rel="apple-touch-icon" href="/kaituo-avatar-icon.png" />
     <title>{pageTitle}</title>
   </head>
   <body>
