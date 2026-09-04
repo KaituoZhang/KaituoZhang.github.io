@@ -5,7 +5,7 @@ import { extname, join } from 'node:path';
 const token = process.env.NOTION_TOKEN;
 const dataSourceId = process.env.NOTION_DATA_SOURCE_ID;
 const translationApiKey = process.env.OPENAI_API_KEY;
-const translationModel = process.env.OPENAI_TRANSLATION_MODEL || 'gpt-5-mini';
+const translationModel = process.env.OPENAI_TRANSLATION_MODEL || 'gpt-4o-mini';
 const root = new URL('..', import.meta.url).pathname;
 const outputFile = join(root, 'src/generated/notion.json');
 const assetDirectory = join(root, 'public/notion-assets');
