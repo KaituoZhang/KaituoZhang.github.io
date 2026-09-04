@@ -15,7 +15,7 @@ const languageHref = alternateHref ?? currentPath.replace(/^\/(en|zh)(?=\/|$)/, 
 <header class="site-header">
   <a class="identity" href={localePath(lang)} aria-label="Kaituo Zhang, home">
     <span class="identity-mark" aria-hidden="true">KZ</span>
-    <span class="identity-name">Kaituo Zhang</span>
+    <span class="identity-name">{lang === 'zh' ? '章凯拓' : 'Kaituo Zhang'}</span>
   </a>
   <nav aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
     {navItems.map(([path, label]) => {

@@ -4,6 +4,6 @@ interface Props { lang?: Lang; }
 const { lang = 'en' } = Astro.props;
 ---
 <footer class="site-footer">
-  <div><strong>Kaituo Zhang</strong><span>{copy[lang].footer}</span></div>
+  <div><strong>{lang === 'zh' ? '章凯拓' : 'Kaituo Zhang'}</strong><span>{copy[lang].footer}</span></div>
   <div><a href="mailto:kzhang42@cougarnet.uh.edu">Email</a><a href="https://github.com/KaituoZhang">GitHub</a></div>
 </footer>

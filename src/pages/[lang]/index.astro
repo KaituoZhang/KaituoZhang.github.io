@@ -20,14 +20,10 @@ const c = copy[lang];
         <span>Trustworthy LLMs</span><span>Synthetic Data</span><span>Anomaly Detection</span>
       </div>
     </div>
-    <aside class="status-card" aria-label={c.labels.current}>
-      <span class="status-dot"></span>
-      <p class="label">{c.labels.current}</p>
-      <strong>{c.hero.role}</strong>
-      <p>University of Houston</p>
-      <p>{c.hero.place}</p>
-      <a href={localePath(lang, 'research')}>{c.labels.readMore}<span>↗</span></a>
-    </aside>
+    <figure class="portrait-card">
+      <img src="/kaituo-sunset.jpg" alt={lang === 'zh' ? '章凯拓在夕阳下眺望远方' : 'Kaituo Zhang looking toward a sunset'} />
+      <figcaption><span>{c.hero.role}</span><span>{c.hero.place}</span></figcaption>
+    </figure>
   </section>
 
   <blockquote class="verse-card">

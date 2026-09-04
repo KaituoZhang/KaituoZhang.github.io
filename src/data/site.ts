@@ -6,7 +6,7 @@ export const copy = {
   en: {
     nav: { home: 'Home', about: 'About', research: 'Research', projects: 'Projects', blog: 'Blog', contact: 'Contact' },
     hero: {
-      kicker: 'Kaituo (Philip) Zhang',
+      kicker: 'Kaituo (Philip) Zhang · 章凯拓',
       title: 'Building AI that deserves to be trusted.',
       intro: 'Hello, my name is Kaituo (Philip) Zhang. I’m a PhD candidate in the Department of Industrial Engineering at the University of Houston, advised by Dr. Na Zou. My current research interests include fairness and faithfulness in large language models (LLMs) and context management.',
       role: 'PhD Candidate · Research Assistant',
@@ -39,9 +39,9 @@ export const copy = {
   zh: {
     nav: { home: '首页', about: '关于我', research: '研究', projects: '项目', blog: '博客', contact: '联系' },
     hero: {
-      kicker: '张开拓（Philip）',
+      kicker: '章凯拓（Philip）',
       title: '让人工智能更可靠，也更值得信任。',
-      intro: '你好，我是张开拓（Kaituo Philip Zhang）。目前就读于休斯顿大学工业工程系博士项目，师从邹娜教授。我的研究主要关注大语言模型的公平性与忠实性、上下文管理，以及可靠的机器学习方法。',
+      intro: '你好，我是章凯拓（Kaituo Philip Zhang）。目前就读于休斯顿大学工业工程系博士项目，师从邹娜教授。我的研究主要关注大语言模型的公平性与忠实性、上下文管理，以及可靠的机器学习方法。',
       role: '博士候选人 · 研究助理',
       place: '美国 · 休斯顿',
     },
@@ -77,6 +77,41 @@ export const news = [
   { date: '05 / 2026', en: 'Tool-use Tax is available on arXiv.', zh: 'Tool-use Tax 已发布在 arXiv。', links: [{ label: 'Paper', href: 'https://arxiv.org/abs/2605.00136' }] },
   { date: '08 / 2025', en: 'I passed the screening exam and became a PhD candidate.', zh: '通过博士资格筛选考试，正式成为博士候选人。', links: [] },
   { date: '05 / 2025', en: 'Our anomaly detection work was accepted by Expert Systems with Applications.', zh: '异常检测研究被 Expert Systems with Applications 接收。', links: [{ label: 'Code', href: 'https://github.com/Philip0512/EDROD' }, { label: 'Paper', href: 'https://www.sciencedirect.com/science/article/pii/S0957417425020433' }] },
+];
+
+export const publications = [
+  {
+    mark: 'ARXIV', year: '2026', venue: 'arXiv preprint',
+    title: 'Are Tools All We Need? Unveiling the Tool-Use Tax in LLM Agents',
+    authors: ['Kaituo Zhang', 'Zhen Xiong', 'Mingyu Zhong', 'Zhimeng Jiang', 'Zhouyuan Yuan', 'Zhecheng Li', 'Ying Lin'],
+    en: 'Reveals when tool-calling protocols can hurt LLM reasoning and introduces a lightweight inference-time gate.',
+    zh: '分析工具调用协议何时会削弱大模型推理，并提出轻量级的推理时门控方法。',
+    links: [{ label: 'PDF', href: 'https://arxiv.org/pdf/2605.00136' }, { label: 'arXiv', href: 'https://arxiv.org/abs/2605.00136' }],
+  },
+  {
+    mark: 'TMLR', year: '2026', venue: 'Transactions on Machine Learning Research',
+    title: 'A Survey on Evaluating Quality and Trustworthiness in LLM-Generated Data',
+    authors: ['Kaituo Zhang', 'Mingzhi Hu', 'Hoang Anh Duy Le', 'Fariha Kabir Torsha', 'Zhimeng Jiang', 'Minh Khai Bui', 'Chia-Yuan Chang', 'Yu-Neng Chuang', 'Zhen Xiong', 'Ying Lin', 'Guanchu Wang', 'Na Zou'],
+    en: 'A metric-oriented framework for evaluating the quality and trustworthiness of LLM-generated data across modalities.',
+    zh: '面向多模态大模型合成数据，建立以质量与可信度为核心的指标化评估框架。',
+    links: [{ label: 'PDF', href: 'https://arxiv.org/pdf/2601.17717' }, { label: 'Code', href: 'https://github.com/KaituoZhang/Awesome-LLM-Data-Generation' }],
+  },
+  {
+    mark: 'EMNLP', year: '2026', venue: 'Findings of EMNLP',
+    title: 'Cleansing the Artificial Mind: A Self-Reflective Detoxification Framework for Large Language Models',
+    authors: ['Kaituo Zhang', 'Zhimeng Jiang', 'Na Zou'],
+    en: 'A self-reflective framework that lets language models detect and correct toxic generations without external modules.',
+    zh: '让语言模型依靠自我反思检测并修正有害生成，无需额外模块或人工标注。',
+    links: [{ label: 'PDF', href: 'https://arxiv.org/pdf/2601.11776' }, { label: 'Code', href: 'https://github.com/KaituoZhang/SRD' }],
+  },
+  {
+    mark: 'ESWA', year: '2025', venue: 'Expert Systems with Applications',
+    title: 'Robust Outlier Detection Method Based on Local Entropy and Global Density',
+    authors: ['Kaituo Zhang', 'Bingyang Zhang', 'Wei Huang', 'Hua Gao', 'Ning Xu', 'Rongchun Wan'],
+    en: 'EDROD combines local Shannon entropy and global density to robustly detect both point and cluster anomalies.',
+    zh: 'EDROD 结合局部香农熵与全局密度，稳健识别点异常与簇异常。',
+    links: [{ label: 'Paper', href: 'https://www.sciencedirect.com/science/article/pii/S0957417425020433' }, { label: 'Code', href: 'https://github.com/Philip0512/EDROD' }],
+  },
 ];
 
 export const projects = [
