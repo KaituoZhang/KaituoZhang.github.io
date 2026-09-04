@@ -242,6 +242,17 @@ function translationBatches(units) {
   return batches;
 }
 
+async function requestValidTranslation(units, sourceLanguage, targetLanguage) {
+  const translations = await requestTranslation(units, sourceLanguage, targetLanguage);
+  if (validTranslations(units, translations)) return translations;
+  if (units.length === 1) throw new Error(`Translation response omitted ${units[0].id}.`);
+  const middle = Math.ceil(units.length / 2);
+  return [
+    ...await requestValidTranslation(units.slice(0, middle), sourceLanguage, targetLanguage),
+    ...await requestValidTranslation(units.slice(middle), sourceLanguage, targetLanguage),
+  ];
+}
+
 async function translatedPost(post, targetLanguage) {
   const sourceLanguage = normalizedLanguage(post.language);
   const units = translationUnits(post);
@@ -256,8 +267,7 @@ async function translatedPost(post, targetLanguage) {
     if (!translationApiKey) return null;
     translations = [];
     for (const batch of translationBatches(units)) {
-      const translatedBatch = await requestTranslation(batch, sourceLanguage, targetLanguage);
-      if (!validTranslations(batch, translatedBatch)) throw new Error(`Translation shape mismatch for ${post.slug}.`);
+      const translatedBatch = await requestValidTranslation(batch, sourceLanguage, targetLanguage);
       translations.push(...translatedBatch);
     }
     await writeFile(cacheFile, `${JSON.stringify(translations, null, 2)}\n`);
