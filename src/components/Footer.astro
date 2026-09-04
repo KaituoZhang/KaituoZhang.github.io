@@ -1,4 +1,9 @@
+---
+import { copy, type Lang } from '../data/site';
+interface Props { lang?: Lang; }
+const { lang = 'en' } = Astro.props;
+---
 <footer class="site-footer">
-  <p>© {new Date().getFullYear()} Kaituo Zhang</p>
+  <div><strong>Kaituo Zhang</strong><span>{copy[lang].footer}</span></div>
   <div><a href="mailto:kzhang42@cougarnet.uh.edu">Email</a><a href="https://github.com/KaituoZhang">GitHub</a></div>
 </footer>

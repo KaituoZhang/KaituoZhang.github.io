@@ -1,24 +1,34 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import type { Lang } from '../data/site';
 import '../styles/global.css';
 
-interface Props { title?: string; description: string; }
-const { title, description } = Astro.props;
+interface Props { title?: string; description: string; lang?: Lang; alternateHref?: string; }
+const { title, description, lang = 'en', alternateHref } = Astro.props;
 const pageTitle = title ? `${title} — Kaituo Zhang` : 'Kaituo Zhang — AI Researcher & Engineer';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
+const otherLang = lang === 'en' ? 'zh' : 'en';
+const otherHref = alternateHref ?? Astro.url.pathname.replace(/^\/(en|zh)(?=\/|$)/, `/${otherLang}`);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    <link rel="alternate" hreflang={otherLang} href={new URL(otherHref, Astro.site ?? Astro.url.origin)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
   </head>
-  <body><div class="page-shell"><Header /><main><slot /></main><Footer /></div></body>
+  <body>
+    <div class="page-shell"><Header lang={lang} alternateHref={alternateHref} /><main><slot /></main><Footer lang={lang} /></div>
+  </body>
 </html>

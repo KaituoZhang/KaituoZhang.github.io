@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { copy, languages, localePath, type Lang } from '../../../data/site';
+import { formatDate, posts } from '../../../lib/notion';
+export function getStaticPaths() { return languages.map((lang) => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: Lang; }
+const { lang } = Astro.props; const c = copy[lang].blog;
+const localizedPosts = posts.filter((post) => (post.language || 'en').toLowerCase().startsWith(lang));
+---
+<BaseLayout lang={lang} title={c.kicker} description={c.intro}>
+  <header class="page-intro"><p class="eyebrow">{c.kicker}</p><h1>{c.title}</h1><p class="lead">{c.intro}</p></header>
+  <section class="section">
+    {localizedPosts.length ? <ol class="post-list">{localizedPosts.map((post) => <li><time datetime={post.publishedDate}>{formatDate(post.publishedDate, lang === 'zh' ? 'zh-CN' : 'en-US')}</time><div><h2><a href={localePath(lang, `blog/${post.slug}`)}>{post.title}</a></h2><p>{post.summary}</p><div class="tags">{post.tags.map((tag) => <span class="tag">{tag}</span>)}</div></div><span class="post-arrow">↗</span></li>)}</ol> : <p class="empty-state">{c.empty}</p>}
+  </section>
+</BaseLayout>

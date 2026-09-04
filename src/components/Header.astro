@@ -1,14 +1,29 @@
 ---
-import { navItems } from '../data/site';
+import { copy, localePath, type Lang } from '../data/site';
+interface Props { lang: Lang; alternateHref?: string; }
+const { lang, alternateHref } = Astro.props;
+const c = copy[lang];
 const currentPath = Astro.url.pathname;
+const navItems = [
+  ['', c.nav.home], ['about', c.nav.about], ['research', c.nav.research],
+  ['projects', c.nav.projects], ['blog', c.nav.blog], ['contact', c.nav.contact],
+];
+const otherLang: Lang = lang === 'en' ? 'zh' : 'en';
+const languageHref = alternateHref ?? currentPath.replace(/^\/(en|zh)(?=\/|$)/, `/${otherLang}`);
 ---
 
 <header class="site-header">
-  <a class="identity" href="/" aria-label="Kaituo Zhang, home">
-    <span class="identity-mark" aria-hidden="true">KZ</span><span>Kaituo Zhang</span>
+  <a class="identity" href={localePath(lang)} aria-label="Kaituo Zhang, home">
+    <span class="identity-mark" aria-hidden="true">KZ</span>
+    <span class="identity-name">Kaituo Zhang</span>
   </a>
-  <nav aria-label="Main navigation">
-    {navItems.map((item) => <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>{item.label}</a>)}
+  <nav aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
+    {navItems.map(([path, label]) => {
+      const href = localePath(lang, path);
+      return <a href={href} aria-current={currentPath === href ? 'page' : undefined}>{label}</a>;
+    })}
   </nav>
-  <span class="language" aria-label="Language selection coming soon">EN <span>/</span> 中文</span>
+  <a class="language-switch" href={languageHref} lang={otherLang === 'zh' ? 'zh-CN' : 'en'} aria-label={lang === 'en' ? '切换到中文' : 'Switch to English'}>
+    <span>{lang === 'en' ? '中文' : 'EN'}</span><span aria-hidden="true">↗</span>
+  </a>
 </header>

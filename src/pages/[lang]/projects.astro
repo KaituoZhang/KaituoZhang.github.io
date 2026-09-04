@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { copy, languages, projects, type Lang } from '../../data/site';
+export function getStaticPaths() { return languages.map((lang) => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: Lang; }
+const { lang } = Astro.props; const c = copy[lang].projects;
+---
+<BaseLayout lang={lang} title={c.kicker} description={c.title}>
+  <header class="page-intro"><p class="eyebrow">{c.kicker}</p><h1>{c.title}</h1></header>
+  <section class="section"><div class="card-grid">{projects.map((project) => <a class="project-card" href={project.href}><span class="project-code">{project.code}</span><h3>{project.title}</h3><p>{project[lang]}</p><div class="tags">{project.tags.map((tag) => <span class="tag">{tag}</span>)}</div><span class="project-arrow">↗</span></a>)}</div></section>
+</BaseLayout>

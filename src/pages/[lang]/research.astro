@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { copy, languages, type Lang } from '../../data/site';
+export function getStaticPaths() { return languages.map((lang) => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: Lang; }
+const { lang } = Astro.props; const c = copy[lang].research;
+---
+<BaseLayout lang={lang} title={c.kicker} description={c.title}>
+  <header class="page-intro"><p class="eyebrow">{c.kicker}</p><h1>{c.title}</h1></header>
+  <section class="research-list">
+    {c.areas.map((area, index) => <article><span>0{index + 1}</span><div><h2>{area[0]}</h2><p>{area[1]}</p></div></article>)}
+  </section>
+</BaseLayout>

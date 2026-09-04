@@ -1,10 +1,3 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+return Astro.redirect('/en/contact/', 301);
 ---
-<BaseLayout title="Contact" description="Get in touch with Kaituo Zhang.">
-  <header class="page-intro"><p class="eyebrow">Contact</p><h1>Let’s exchange ideas.</h1><p class="lead">For research conversations, collaborations, or a thoughtful hello, email is the best place to start.</p></header>
-  <section class="section contact-grid">
-    <a class="card" href="mailto:kzhang42@cougarnet.uh.edu"><p class="eyebrow">Email</p><h3>kzhang42@cougarnet.uh.edu</h3><p>Research, collaboration, and academic inquiries.</p></a>
-    <a class="card" href="https://github.com/KaituoZhang"><p class="eyebrow">GitHub</p><h3>@KaituoZhang</h3><p>Code, experiments, and open-source work.</p></a>
-  </section>
-</BaseLayout>

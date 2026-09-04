@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { copy, languages, type Lang } from '../../data/site';
+export function getStaticPaths() { return languages.map((lang) => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: Lang; }
+const { lang } = Astro.props; const c = copy[lang].about;
+---
+<BaseLayout lang={lang} title={c.kicker} description={c.body[0]}>
+  <header class="page-intro"><p class="eyebrow">{c.kicker}</p><h1>{c.title}</h1></header>
+  <article class="prose">
+    {c.body.map((paragraph) => <p>{paragraph}</p>)}
+    <h2>{c.recognition}</h2>
+    <ul class="recognition-list">{c.awards.map((award, index) => <li><span>0{index + 1}</span>{award}</li>)}</ul>
+  </article>
+</BaseLayout>

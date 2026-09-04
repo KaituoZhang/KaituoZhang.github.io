@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import NotionBlocks from '../../../components/NotionBlocks.astro';
+import { copy, localePath, type Lang } from '../../../data/site';
+import { formatDate, posts, type Post } from '../../../lib/notion';
+
+export function getStaticPaths() {
+  return posts.map((post) => {
+    const lang: Lang = (post.language || 'en').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+    return { params: { lang, slug: post.slug }, props: { post, lang } };
+  });
+}
+interface Props { post: Post; lang: Lang; }
+const { post, lang } = Astro.props;
+const otherLang: Lang = lang === 'en' ? 'zh' : 'en';
+const translation = posts.find((candidate) => candidate.translationKey === post.translationKey && candidate.id !== post.id && (candidate.language || '').toLowerCase().startsWith(otherLang));
+const alternateHref = translation ? localePath(otherLang, `blog/${translation.slug}`) : localePath(otherLang, 'blog');
+const c = copy[lang];
+---
+<BaseLayout lang={lang} title={post.title} description={post.summary || `An article by Kaituo Zhang: ${post.title}`} alternateHref={alternateHref}>
+  <article class="article">
+    <header class="article-header">
+      <a class="back-link" href={localePath(lang, 'blog')}>← {c.allWriting}</a>
+      <p class="eyebrow">{c.fieldNotes}</p>
+      <h1>{post.title}</h1>
+      {post.summary && <p class="lead">{post.summary}</p>}
+      <div class="article-meta"><time datetime={post.publishedDate}>{formatDate(post.publishedDate, lang === 'zh' ? 'zh-CN' : 'en-US')}</time><span>·</span><span>{lang.toUpperCase()}</span></div>
+      {post.cover && <img class="article-cover" src={post.cover} alt="" />}
+    </header>
+    <div class="article-body"><NotionBlocks blocks={post.blocks} /></div>
+  </article>
+</BaseLayout>

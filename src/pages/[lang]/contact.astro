@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { copy, languages, type Lang } from '../../data/site';
+export function getStaticPaths() { return languages.map((lang) => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: Lang; }
+const { lang } = Astro.props; const c = copy[lang].contact;
+---
+<BaseLayout lang={lang} title={c.kicker} description={c.intro}>
+  <header class="page-intro"><p class="eyebrow">{c.kicker}</p><h1>{c.title}</h1><p class="lead">{c.intro}</p></header>
+  <section class="section contact-grid">
+    <a class="contact-card" href="mailto:kzhang42@cougarnet.uh.edu"><span>01 / EMAIL</span><h2>kzhang42@cougarnet.uh.edu</h2><p>{c.email}</p><b>↗</b></a>
+    <a class="contact-card" href="https://github.com/KaituoZhang"><span>02 / GITHUB</span><h2>@KaituoZhang</h2><p>{c.github}</p><b>↗</b></a>
+  </section>
+</BaseLayout>
