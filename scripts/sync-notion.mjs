@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
 const token = process.env.NOTION_TOKEN;
@@ -10,6 +10,7 @@ const root = new URL('..', import.meta.url).pathname;
 const outputFile = join(root, 'src/generated/notion.json');
 const assetDirectory = join(root, 'public/notion-assets');
 const translationCacheDirectory = join(root, '.translation-cache');
+const translationUnitCacheDirectory = join(translationCacheDirectory, 'units');
 const notionVersion = '2026-03-11';
 
 if (!token || !dataSourceId) {
@@ -19,6 +20,7 @@ if (!token || !dataSourceId) {
 
 await mkdir(assetDirectory, { recursive: true });
 await mkdir(translationCacheDirectory, { recursive: true });
+await mkdir(translationUnitCacheDirectory, { recursive: true });
 
 async function notion(path, options = {}) {
   for (let attempt = 0; attempt < 4; attempt += 1) {
@@ -220,9 +222,10 @@ async function requestTranslation(units, sourceLanguage, targetLanguage) {
 
 function validTranslations(units, translations) {
   if (!Array.isArray(translations)) return false;
+  if (translations.some((item) => !item || typeof item.id !== 'string' || typeof item.text !== 'string')) return false;
   const expected = new Set(units.map((unit) => unit.id));
   const returnedIds = new Set(translations.map((item) => item.id));
-  return translations.length === expected.size && returnedIds.size === expected.size && translations.every((item) => expected.has(item.id) && typeof item.text === 'string');
+  return translations.length === expected.size && returnedIds.size === expected.size && translations.every((item) => expected.has(item.id));
 }
 
 function translationBatches(units) {
@@ -253,6 +256,46 @@ async function requestValidTranslation(units, sourceLanguage, targetLanguage) {
   ];
 }
 
+function unitCacheFile(unit, sourceLanguage, targetLanguage) {
+  const hash = createHash('sha256').update(JSON.stringify({ cacheVersion: 1, model: translationModel, sourceLanguage, targetLanguage, text: unit.text })).digest('hex');
+  return join(translationUnitCacheDirectory, `${hash}.json`);
+}
+
+async function readUnitTranslation(unit, sourceLanguage, targetLanguage) {
+  try {
+    const cached = JSON.parse(await readFile(unitCacheFile(unit, sourceLanguage, targetLanguage), 'utf8'));
+    return typeof cached.text === 'string' ? { id: unit.id, text: cached.text } : null;
+  } catch {
+    return null;
+  }
+}
+
+async function writeUnitTranslation(unit, translation, sourceLanguage, targetLanguage) {
+  await writeFile(unitCacheFile(unit, sourceLanguage, targetLanguage), `${JSON.stringify({ text: translation.text })}\n`);
+}
+
+async function legacyPrefixTranslations(post, units) {
+  let filenames = [];
+  try {
+    filenames = (await readdir(translationCacheDirectory)).filter((name) => name.endsWith('.json'));
+  } catch {
+    return new Map();
+  }
+  for (const filename of filenames) {
+    try {
+      const cached = JSON.parse(await readFile(join(translationCacheDirectory, filename), 'utf8'));
+      if (!Array.isArray(cached) || cached.length >= units.length) continue;
+      const title = cached.find((item) => item.id === 'title');
+      if (!title || title.text.trim().toLowerCase() !== post.title.trim().toLowerCase()) continue;
+      const prefixIds = new Set(units.slice(0, cached.length).map((unit) => unit.id));
+      if (cached.every((item) => prefixIds.has(item.id) && typeof item.text === 'string')) return new Map(cached.map((item) => [item.id, item]));
+    } catch {
+      // Ignore incomplete or unrelated legacy cache files.
+    }
+  }
+  return new Map();
+}
+
 async function translatedPost(post, targetLanguage) {
   const sourceLanguage = normalizedLanguage(post.language);
   const units = translationUnits(post);
@@ -265,13 +308,31 @@ async function translatedPost(post, targetLanguage) {
     console.log(`Using cached ${sourceLanguage}→${targetLanguage} translation for ${post.slug}.`);
   } catch {
     if (!translationApiKey) return null;
-    translations = [];
-    for (const batch of translationBatches(units)) {
-      const translatedBatch = await requestValidTranslation(batch, sourceLanguage, targetLanguage);
-      translations.push(...translatedBatch);
+    const legacyTranslations = await legacyPrefixTranslations(post, units);
+    const translatedById = new Map();
+    const missingUnits = [];
+    for (const unit of units) {
+      const cached = await readUnitTranslation(unit, sourceLanguage, targetLanguage);
+      const legacy = legacyTranslations.get(unit.id);
+      const translation = cached || legacy;
+      if (translation) {
+        translatedById.set(unit.id, translation);
+        if (!cached) await writeUnitTranslation(unit, translation, sourceLanguage, targetLanguage);
+      } else {
+        missingUnits.push(unit);
+      }
     }
+    for (const batch of translationBatches(missingUnits)) {
+      const translatedBatch = await requestValidTranslation(batch, sourceLanguage, targetLanguage);
+      for (const translation of translatedBatch) {
+        const unit = batch.find((candidate) => candidate.id === translation.id);
+        translatedById.set(translation.id, translation);
+        await writeUnitTranslation(unit, translation, sourceLanguage, targetLanguage);
+      }
+    }
+    translations = units.map((unit) => translatedById.get(unit.id));
     await writeFile(cacheFile, `${JSON.stringify(translations, null, 2)}\n`);
-    console.log(`Translated ${post.slug} from ${sourceLanguage} to ${targetLanguage} with ${translationModel}.`);
+    console.log(`Translated ${missingUnits.length} new or changed unit(s) in ${post.slug} from ${sourceLanguage} to ${targetLanguage} with ${translationModel}; reused ${units.length - missingUnits.length}.`);
   }
 
   if (!validTranslations(units, translations)) throw new Error(`Translation shape mismatch for ${post.slug}.`);
