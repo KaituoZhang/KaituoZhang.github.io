@@ -40,22 +40,18 @@ const c = copy[lang];
   </section>
 
   <section class="section">
-    <div class="section-heading"><span class="section-number">02</span><h2>{c.labels.service}</h2></div>
-    <div class="service-card">
-      <div>
-        <span class="service-role">{c.labels.reviewer}</span>
-        <p>{lang === 'zh' ? '为人工智能与模式识别领域的会议及期刊提供同行评审。' : 'Peer review for conferences and journals in artificial intelligence and pattern recognition.'}</p>
-      </div>
-      <div class="service-venues" aria-label={c.labels.reviewer}>
-        {reviewingVenues.map((venue) => <span>{venue}</span>)}
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-heading"><span class="section-number">03</span><h2>{c.labels.work}</h2></div>
+    <div class="section-heading"><span class="section-number">02</span><h2>{c.labels.work}</h2></div>
     <div class="card-grid">
       {projects.map((project) => <a class="project-card" href={project.href}><span class="project-code">{project.code}</span><h3>{project.title}</h3><p>{project[lang]}</p><div class="tags">{project.tags.map((tag) => <span class="tag">{tag}</span>)}</div><span class="project-arrow">↗</span></a>)}
     </div>
+    <aside class="service-strip" aria-labelledby="service-title">
+      <div>
+        <span>{c.labels.service}</span>
+        <h3 id="service-title">{c.labels.reviewer}</h3>
+      </div>
+      <ul aria-label={c.labels.reviewer}>
+        {reviewingVenues.map((venue) => <li>{venue}</li>)}
+      </ul>
+    </aside>
   </section>
 </BaseLayout>

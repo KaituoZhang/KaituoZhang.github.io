@@ -146,23 +146,21 @@ h3 { margin-bottom: 0; font-size: 1.38rem; }
 .news-list time, .post-list time { color: var(--muted); font-size: .84rem; font-variant-numeric: tabular-nums; }
 .inline-links { display: inline-flex; gap: 12px; margin-left: 12px; }
 .inline-links a { color: var(--blue); font-size: .84rem; font-weight: 740; }
-.service-card {
-  position: relative;
+.service-strip {
   display: grid;
-  grid-template-columns: minmax(220px, .72fr) minmax(0, 1.28fr);
-  gap: clamp(28px, 5vw, 70px);
-  overflow: hidden;
-  padding: clamp(28px, 4vw, 44px);
-  border: 1px solid var(--ink);
-  background: var(--surface);
-  box-shadow: 8px 8px 0 var(--cyan);
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  gap: 28px;
+  margin-top: 42px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
-.service-card::after { content: 'REVIEW'; position: absolute; right: 18px; bottom: -22px; color: rgba(49, 87, 255, .07); font-size: clamp(3.5rem, 9vw, 7rem); font-weight: 900; letter-spacing: -.07em; pointer-events: none; }
-.service-role { display: block; color: var(--blue); font-size: clamp(1.5rem, 3vw, 2.35rem); font-weight: 780; letter-spacing: -.04em; }
-.service-card p { max-width: 430px; margin: 13px 0 0; color: var(--muted); }
-.service-venues { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-content: center; }
-.service-venues span { padding: 13px 15px; border: 1px solid var(--line); background: #f7f8ff; font-size: .86rem; font-weight: 760; }
-.service-venues span:first-child { color: white; border-color: var(--blue); background: var(--blue); }
+.service-strip > div > span { color: var(--muted); font-size: .68rem; font-weight: 780; letter-spacing: .1em; text-transform: uppercase; }
+.service-strip h3 { margin: 4px 0 0; font-size: 1.05rem; letter-spacing: -.02em; }
+.service-strip ul { display: flex; flex-wrap: wrap; gap: 7px 20px; padding: 0; margin: 0; list-style: none; }
+.service-strip li { position: relative; color: var(--muted); font-size: .86rem; font-weight: 650; }
+.service-strip li:not(:last-child)::after { content: '·'; position: absolute; right: -12px; color: var(--line); }
 .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .project-card {
   position: relative;
@@ -274,7 +272,6 @@ h3 { margin-bottom: 0; font-size: 1.38rem; }
   .verse-card { grid-template-columns: auto 1fr; }
   .verse-card cite { grid-column: 2; }
   .card-grid, .contact-grid { grid-template-columns: 1fr; }
-  .service-card { grid-template-columns: 1fr; }
   .project-card { min-height: 240px; }
 }
 @media (max-width: 560px) {
@@ -284,7 +281,7 @@ h3 { margin-bottom: 0; font-size: 1.38rem; }
   .verse-card { gap: 14px; padding: 20px; margin-bottom: 66px; box-shadow: 5px 5px 0 var(--ink); }
   .section { padding: 58px 0; }
   .section-heading, .news-list li, .research-list article, .post-list li { grid-template-columns: 1fr; gap: 9px; }
-  .service-venues { grid-template-columns: 1fr; }
+  .service-strip { grid-template-columns: 1fr; gap: 12px; margin-top: 32px; }
   .publication-row { grid-template-columns: 96px 1fr; gap: 20px; }
   .paper-mark { min-height: 84px; padding: 10px; }
   .post-arrow { position: absolute; right: 2px; top: 28px; }
