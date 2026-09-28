@@ -12,7 +12,7 @@ export const copy = {
       role: 'PhD Candidate · Research Assistant',
       place: 'Houston, United States',
     },
-    labels: { current: 'Currently', focus: 'Research focus', news: 'News', work: 'Selected work', readMore: 'Explore research', latest: 'Latest notes' },
+    labels: { current: 'Currently', focus: 'Research focus', news: 'News', service: 'Academic service', reviewer: 'Reviewer', work: 'Selected work', readMore: 'Explore research', latest: 'Latest notes' },
     verse: 'The LORD is my shepherd; I have all that I need.',
     verseRef: 'Psalm 23:1 · NLT',
     about: {
@@ -45,7 +45,7 @@ export const copy = {
       role: '博士候选人 · 研究助理',
       place: '美国 · 休斯顿',
     },
-    labels: { current: '当前', focus: '研究方向', news: '最新动态', work: '代表工作', readMore: '了解研究', latest: '最近文章' },
+    labels: { current: '当前', focus: '研究方向', news: '最新动态', service: '学术服务', reviewer: '审稿人', work: '代表工作', readMore: '了解研究', latest: '最近文章' },
     verse: '耶和华是我的牧者，我必不致缺乏。',
     verseRef: '诗篇 23:1',
     about: {
@@ -78,6 +78,8 @@ export const news = [
   { date: '08 / 2025', en: 'I passed the screening exam and became a PhD candidate.', zh: '通过博士资格筛选考试，正式成为博士候选人。', links: [] },
   { date: '05 / 2025', en: 'Our anomaly detection work was accepted by Expert Systems with Applications.', zh: '异常检测研究被 Expert Systems with Applications 接收。', links: [{ label: 'Code', href: 'https://github.com/Philip0512/EDROD' }, { label: 'Paper', href: 'https://www.sciencedirect.com/science/article/pii/S0957417425020433' }] },
 ];
+
+export const reviewingVenues = ['NeurIPS (NIPS)', 'ACL', 'EMNLP', 'Pattern Recognition'];
 
 export const publications = [
   {
