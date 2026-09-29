@@ -72,7 +72,7 @@ export const copy = {
 } as const;
 
 export const news = [
-  { date: '09 / 2026', en: 'AsynCodeBench is available on arXiv.', zh: 'AsynCodeBench 已发布在 arXiv。', links: [{ label: 'Paper', href: 'https://arxiv.org/abs/2609.32662' }, { label: 'Code', href: 'https://github.com/KaituoZhang/AsynCodeBench' }] },
+  { date: '09 / 2026', en: 'AsynCodeBench is available on arXiv.', zh: 'AsynCodeBench 已发布在 arXiv。', links: [{ label: 'Paper', href: 'https://arxiv.org/abs/2609.32662' }, { label: 'Code', href: 'https://github.com/KaituoZhang/AsynCodeBench/tree/main' }] },
   { date: '08 / 2026', en: 'SRD was accepted to Findings of EMNLP 2026.', zh: 'SRD 被 EMNLP 2026 Findings 接收。', links: [{ label: 'Code', href: 'https://github.com/KaituoZhang/SRD' }, { label: 'Paper', href: 'https://arxiv.org/pdf/2601.11776' }] },
   { date: '05 / 2026', en: 'Our survey on evaluating LLM-generated synthetic data was accepted by TMLR.', zh: '关于大模型合成数据评估的综述被 TMLR 接收。', links: [{ label: 'Repo', href: 'https://github.com/KaituoZhang/Awesome-LLM-Data-Generation' }, { label: 'Paper', href: 'https://arxiv.org/pdf/2601.17717' }] },
   { date: '05 / 2026', en: 'Tool-use Tax is available on arXiv.', zh: 'Tool-use Tax 已发布在 arXiv。', links: [{ label: 'Paper', href: 'https://arxiv.org/abs/2605.00136' }] },
@@ -89,7 +89,7 @@ export const publications = [
     authors: ['Kaituo Zhang', 'Zhen Xiong', 'Zhimeng Jiang', 'Mingyu Zhong', 'Zhouyuan Yuan', 'Zhecheng Li', 'Bowen Lin', 'Chia-Yuan Chang', 'Mingzhi Hu', 'Huazheng Wang', 'Ying Lin'],
     en: 'A dependency-centric benchmark with executable checkers, ADPR, and DRS that separates collaboration quality from coding ability in asynchronous multi-agent software engineering.',
     zh: '以软件依赖为核心，通过可执行检查器、ADPR 与 DRS，将异步多智能体软件工程中的协作质量与单体编码能力分开衡量。',
-    links: [{ label: 'PDF', href: 'https://arxiv.org/pdf/2609.32662' }, { label: 'arXiv', href: 'https://arxiv.org/abs/2609.32662' }, { label: 'Code', href: 'https://github.com/KaituoZhang/AsynCodeBench' }],
+    links: [{ label: 'PDF', href: 'https://arxiv.org/pdf/2609.32662' }, { label: 'arXiv', href: 'https://arxiv.org/abs/2609.32662' }, { label: 'Code', href: 'https://github.com/KaituoZhang/AsynCodeBench/tree/main' }],
   },
   {
     mark: 'ARXIV', year: '2026', venue: 'arXiv preprint',
@@ -128,7 +128,7 @@ export const publications = [
 export const projects = [
   { title: 'Awesome LLM Data Generation', en: 'A metric-oriented survey on quality and trustworthiness in evaluating LLM-generated synthetic data.', zh: '从评估指标出发，系统梳理大模型合成数据的质量与可信度。', tags: ['LLM', 'Synthetic Data', 'Survey'], href: 'https://github.com/KaituoZhang/Awesome-LLM-Data-Generation', code: '01' },
   { title: 'EDROD', en: 'A parameter-free, unsupervised anomaly detection algorithm based on entropy density ratios.', zh: '基于熵密度比的无参数无监督异常检测算法。', tags: ['Anomaly Detection', 'Research'], href: 'https://github.com/Philip0512/EDROD', code: '02' },
-  { title: 'RefChecker', en: 'A practical utility for reference formatting, validation, and citation checking.', zh: '用于参考文献格式化、验证与引用检查的实用工具。', tags: ['Tooling', 'Productivity'], href: 'https://github.com/KaituoZhang/RefChecker', code: '03' },
+  { title: 'SRD', en: 'A self-reflective detoxification framework for building safer and more trustworthy large language models.', zh: '通过自我反思实现大语言模型去毒，构建更安全、更可信的语言模型。', tags: ['Trustworthy LLMs', 'Detoxification'], href: 'https://github.com/KaituoZhang/SRD', code: '03' },
 ];
 
 export function localePath(lang: Lang, path = '') {
