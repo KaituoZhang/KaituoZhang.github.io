@@ -72,6 +72,7 @@ export const copy = {
 } as const;
 
 export const news = [
+  { date: '09 / 2026', en: 'AsynCodeBench is available on arXiv.', zh: 'AsynCodeBench 已发布在 arXiv。', links: [{ label: 'Paper', href: 'https://arxiv.org/abs/2609.32662' }, { label: 'Code', href: 'https://github.com/KaituoZhang/AsynCodeBench' }] },
   { date: '08 / 2026', en: 'SRD was accepted to Findings of EMNLP 2026.', zh: 'SRD 被 EMNLP 2026 Findings 接收。', links: [{ label: 'Code', href: 'https://github.com/KaituoZhang/SRD' }, { label: 'Paper', href: 'https://arxiv.org/pdf/2601.11776' }] },
   { date: '05 / 2026', en: 'Our survey on evaluating LLM-generated synthetic data was accepted by TMLR.', zh: '关于大模型合成数据评估的综述被 TMLR 接收。', links: [{ label: 'Repo', href: 'https://github.com/KaituoZhang/Awesome-LLM-Data-Generation' }, { label: 'Paper', href: 'https://arxiv.org/pdf/2601.17717' }] },
   { date: '05 / 2026', en: 'Tool-use Tax is available on arXiv.', zh: 'Tool-use Tax 已发布在 arXiv。', links: [{ label: 'Paper', href: 'https://arxiv.org/abs/2605.00136' }] },
@@ -82,6 +83,14 @@ export const news = [
 export const reviewingVenues = ['NeurIPS (NIPS)', 'ACL', 'EMNLP', 'Pattern Recognition'];
 
 export const publications = [
+  {
+    mark: 'ARXIV', year: '2026', venue: 'arXiv preprint',
+    title: 'AsynCodeBench: Benchmarking Collaboration of Asynchronous Multi-Agent Systems in Software Engineering',
+    authors: ['Kaituo Zhang', 'Zhen Xiong', 'Zhimeng Jiang', 'Mingyu Zhong', 'Zhouyuan Yuan', 'Zhecheng Li', 'Bowen Lin', 'Chia-Yuan Chang', 'Mingzhi Hu', 'Huazheng Wang', 'Ying Lin'],
+    en: 'A dependency-centric benchmark with executable checkers, ADPR, and DRS that separates collaboration quality from coding ability in asynchronous multi-agent software engineering.',
+    zh: '以软件依赖为核心，通过可执行检查器、ADPR 与 DRS，将异步多智能体软件工程中的协作质量与单体编码能力分开衡量。',
+    links: [{ label: 'PDF', href: 'https://arxiv.org/pdf/2609.32662' }, { label: 'arXiv', href: 'https://arxiv.org/abs/2609.32662' }, { label: 'Code', href: 'https://github.com/KaituoZhang/AsynCodeBench' }],
+  },
   {
     mark: 'ARXIV', year: '2026', venue: 'arXiv preprint',
     title: 'Are Tools All We Need? Unveiling the Tool-Use Tax in LLM Agents',
