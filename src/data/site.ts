@@ -126,7 +126,7 @@ export const publications = [
 ];
 
 export const projects = [
-  { title: 'Awesome LLM Data Generation', en: 'A metric-oriented survey on quality and trustworthiness in evaluating LLM-generated synthetic data.', zh: '从评估指标出发，系统梳理大模型合成数据的质量与可信度。', tags: ['LLM', 'Synthetic Data', 'Survey'], href: 'https://github.com/KaituoZhang/Awesome-LLM-Data-Generation', code: '01' },
+  { title: 'AsynCodeBench', en: 'A dependency-centric benchmark for evaluating collaboration in asynchronous multi-agent software engineering.', zh: '面向异步多智能体软件工程，以依赖关系为核心评估协作能力的基准。', tags: ['Multi-Agent Systems', 'Software Engineering'], href: 'https://asyncodebench.org/', codeHref: 'https://github.com/KaituoZhang/AsynCodeBench/tree/main', code: '01' },
   { title: 'EDROD', en: 'A parameter-free, unsupervised anomaly detection algorithm based on entropy density ratios.', zh: '基于熵密度比的无参数无监督异常检测算法。', tags: ['Anomaly Detection', 'Research'], href: 'https://github.com/Philip0512/EDROD', code: '02' },
   { title: 'SRD', en: 'A self-reflective detoxification framework for building safer and more trustworthy large language models.', zh: '通过自我反思实现大语言模型去毒，构建更安全、更可信的语言模型。', tags: ['Trustworthy LLMs', 'Detoxification'], href: 'https://github.com/KaituoZhang/SRD', code: '03' },
 ];

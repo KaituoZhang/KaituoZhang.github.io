@@ -7,5 +7,5 @@ const { lang } = Astro.props; const c = copy[lang].projects;
 ---
 <BaseLayout lang={lang} title={c.kicker} description={c.title}>
   <header class="page-intro"><p class="eyebrow">{c.kicker}</p><h1>{c.title}</h1></header>
-  <section class="section"><div class="card-grid">{projects.map((project) => <a class="project-card" href={project.href}><span class="project-code">{project.code}</span><h3>{project.title}</h3><p>{project[lang]}</p><div class="tags">{project.tags.map((tag) => <span class="tag">{tag}</span>)}</div><span class="project-arrow">↗</span></a>)}</div></section>
+  <section class="section"><div class="card-grid">{projects.map((project) => <article class="project-card"><span class="project-code">{project.code}</span><h3>{project.title}</h3><p>{project[lang]}</p><div class="tags">{project.tags.map((tag) => <span class="tag">{tag}</span>)}</div><div class="project-links"><a href={project.href}>{'codeHref' in project ? (lang === 'zh' ? '项目网站' : 'Website') : 'GitHub'} ↗</a>{'codeHref' in project && <a href={project.codeHref}>GitHub ↗</a>}</div></article>)}</div></section>
 </BaseLayout>
